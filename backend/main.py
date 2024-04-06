@@ -35,7 +35,7 @@ with open("./movies.txt", 'r', encoding="utf-8") as file:
 
 @app.get("/movies/{movie_id}")
 def get_movie(movie_id: int):
-    if movie_id > len(movies):
+    if movie_id > len(movies) or not movies[movie_id]:
         return None
     mov = movies[movie_id]
     return {
@@ -45,7 +45,7 @@ def get_movie(movie_id: int):
 
 @app.put("/movies/{movie_id}")
 def put_movie(movie_id: int, movie: Movie):
-    if movie_id > len(movies):
+    if movie_id > len(movies) or not movies[movie_id]:
         return None
     mov = movies[movie_id]
     mov.name = movie.name
