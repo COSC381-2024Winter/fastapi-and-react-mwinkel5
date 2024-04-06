@@ -16,10 +16,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-def read_root():
-    return {"Hello": "world"}
-
 movies = []
 mov_count = 0
 with open("./movies.txt", 'r', encoding="utf-8") as file:
@@ -34,13 +30,16 @@ with open("./movies.txt", 'r', encoding="utf-8") as file:
             )
             movies.append(mov)
             mov_count += 1
-
-    print("hiu")
             
     mov_count += 1
 
-for mov in movies:
-    print(mov.id)
-    print(mov.name)
-    print(mov.cast)
-    print()
+@app.get("/movie/{movie_id}")
+def get_movie(movie_id: int):
+    for i, mov in enumerate(movies):
+        if mov.id == movie_id:
+            return {
+                "id": mov.id,
+                "name": mov.name,
+                "cast": mov.cast
+            }
+    return None
