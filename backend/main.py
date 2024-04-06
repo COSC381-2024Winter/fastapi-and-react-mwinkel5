@@ -59,3 +59,14 @@ def delete_movie(movie_id: int):
     mov = get_movie(movie_id)
     movies[movie_id] = None
     return mov
+
+@app.post("/movies/add")
+def post_movie(movie: Movie):
+    for i, mov in enumerate(movies):
+        if mov == None:
+            # This will add the new movie in a space where a previous entry was deleted, to save space
+            movies[i] = movie
+            return i
+    # This will just add the movie to the end if no movies have been deleted
+    movies.append(movie)
+    return len(movies)
