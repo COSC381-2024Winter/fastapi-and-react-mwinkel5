@@ -35,7 +35,7 @@ with open("./movies.txt", 'r', encoding="utf-8") as file:
 
 @app.get("/movies/{movie_id}")
 def get_movie(movie_id: int):
-    if movie_id > len(movies) or movie_id < 0 or not movies[movie_id]:
+    if movie_id >= len(movies) or movie_id < 0 or not movies[movie_id]:
         return None
     mov = movies[movie_id]
     return {
@@ -45,7 +45,7 @@ def get_movie(movie_id: int):
 
 @app.put("/movies/{movie_id}")
 def put_movie(movie_id: int, movie: Movie):
-    if movie_id > len(movies) or movie_id < 0 or not movies[movie_id]:
+    if movie_id >= len(movies) or movie_id < 0 or not movies[movie_id]:
         return None
     mov = movies[movie_id]
     mov.name = movie.name
@@ -54,8 +54,19 @@ def put_movie(movie_id: int, movie: Movie):
 
 @app.delete("/movies/{movie_id}")
 def delete_movie(movie_id: int):
-    if movie_id > len(movies) or movie_id < 0 or not movies[movie_id]:
+    if movie_id >= len(movies) or movie_id < 0 or not movies[movie_id]:
         return None
     mov = get_movie(movie_id)
     movies[movie_id] = None
     return mov
+
+@app.post("/movies/add")
+def post_movie(movie: Movie):
+    for i, mov in enumerate(movies):
+        if mov == None:
+            # This will add the new movie in a space where a previous entry was deleted, to save space
+            movies[i] = movie
+            return i
+    # This will just add the movie to the end if no movies have been deleted
+    movies.append(movie)
+    return len(movies)
