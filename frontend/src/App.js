@@ -1,6 +1,8 @@
 import './App.css';
-import { TextField } from '@mui/material'
+import { List, ListItem, ListItemIcon, ListItemText, TextField } from '@mui/material'
+import LocalMoviesIcon from '@mui/icons-material/LocalMovies'
 import { useEffect, useState } from 'react'
+
 
 function App() {
   const [movieId, setMovieId] = useState("1")
@@ -10,6 +12,8 @@ function App() {
     console.log(`${movieId}`)
 
     if(movieId === "") {
+      setMovie(null)
+    } else if(isNaN(movieId)) {
       setMovie(null)
     } else {
       fetch(`http://localhost:8000/movies/${movieId}`)
@@ -36,6 +40,29 @@ function App() {
           onChange={e=>setMovieId(e.target.value)}
         />
       </header>
+
+      <List>
+        {
+          movieId === "" ? (
+            <ListItem>
+              <ListItemIcon><LocalMoviesIcon /></ListItemIcon>
+              <ListItemText primary={"Enter a Movie ID..."}></ListItemText>
+            </ListItem>
+          ) : (
+            movie ? (
+              <ListItem>
+                <ListItemIcon><LocalMoviesIcon /></ListItemIcon>
+                <ListItemText primary={movie['name']}></ListItemText>
+              </ListItem>
+            ) : (
+              <ListItem>
+                <ListItemIcon><LocalMoviesIcon /></ListItemIcon>
+                <ListItemText primary={`No movie with ID: ${movieId}`}></ListItemText>
+              </ListItem>
+            )
+          )
+         }
+      </List>
     </div>
   );
 }
