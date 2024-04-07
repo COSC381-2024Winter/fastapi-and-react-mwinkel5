@@ -4,9 +4,24 @@ import { useEffect, useState } from 'react'
 
 function App() {
   const [movieId, setMovieId] = useState("1")
+  const [movie, setMovie] = useState(null)
 
   useEffect(() => {
     console.log(`${movieId}`)
+
+    if(movieId === "") {
+      setMovie(null)
+    } else {
+      fetch(`http://localhost:8000/movies/${movieId}`)
+      .then(result => result.json())
+      .then(result => {
+        console.log(result)
+        setMovie(result)
+      })
+    }
+
+
+
   }, [movieId])
 
   return (
